@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Daftar</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Balance</string>
+
+
+    <string name="Given">أعطيت</string>
+    <string name="_1000">1000</string>
+    <string name="Taken">تسلمت</string>
+    <string name="Customers">الزبناء</string>
+    <string name="_0">(0)</string>
+</resources>
