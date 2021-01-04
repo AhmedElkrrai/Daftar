@@ -3,27 +3,31 @@ package com.example.daftar.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.daftar.R;
 import com.example.daftar.model.Customer;
-import com.example.daftar.ui.ContactsActivity;
-import com.example.daftar.ui.CustomerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentDashboard extends Fragment {
 
-    List<Customer> mCustomersList;
+    private CustomerViewModel customerViewModel;
+    private static final String TAG = "FragmentDashboard";
+    public static final int ADD_Customer_REQUEST = 1;
 
     public FragmentDashboard() {
         // Required empty public constructor
@@ -32,29 +36,42 @@ public class FragmentDashboard extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        mCustomersList = new ArrayList<>();
         RecyclerView mRecyclerView = v.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
 
         CustomerAdapter mAdapter = new CustomerAdapter();
-        mAdapter.setList(mCustomersList);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+
+        customerViewModel = ViewModelProviders.of(this).get(CustomerViewModel.class);
+        customerViewModel.getAllCustomers().observe(getActivity(), new Observer<List<Customer>>() {
+            @Override
+            public void onChanged(List<Customer> customers) {
+                mAdapter.setList(customers);
+            }
+        });
 
         FloatingActionButton floatingActionButton = v.findViewById(R.id.add_button);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), ContactsActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, ADD_Customer_REQUEST);
             }
         });
-
         return v;
     }
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ADD_Customer_REQUEST) {
+            String customerName = data.getStringExtra(ContactsActivity.EXTRA_CUSTOMER_NAME);
+            Customer customer = new Customer(customerName, "0", "دين");
+            customerViewModel.insert(customer);
+        }
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {

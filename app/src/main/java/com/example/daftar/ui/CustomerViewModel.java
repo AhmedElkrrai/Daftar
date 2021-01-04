@@ -24,8 +24,8 @@ public class CustomerViewModel extends AndroidViewModel {
         allCustomers = repository.getAllCustomers();
     }
 
-    public void insert(Customer contact) {
-        repository.insert(contact);
+    public void insert(Customer customer) {
+        repository.insert(customer);
     }
 
     public LiveData<List<Customer>> getAllCustomers() {

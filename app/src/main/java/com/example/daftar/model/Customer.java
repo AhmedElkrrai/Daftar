@@ -12,16 +12,9 @@ public class Customer {
     private String totalCash;
     private String details;
 
-    public Customer(int id, String customerName, String totalCash, String details) {
-        this.id = id;
+    public Customer(String customerName, String totalCash, String details) {
         this.customerName = customerName;
         this.totalCash = totalCash;
-        this.details = details;
-    }
-
-    public Customer(String customerName, String money, String details) {
-        this.customerName = customerName;
-        this.totalCash = money;
         this.details = details;
     }
 

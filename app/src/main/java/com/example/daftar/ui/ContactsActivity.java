@@ -9,14 +9,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.daftar.R;
 import com.example.daftar.model.Contact;
+import com.example.daftar.model.Customer;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,6 +31,11 @@ public class ContactsActivity extends AppCompatActivity {
     private final int READ_CONTACTS_CODE = 123;
     private List<Contact> mContactsList;
     private ContactAdapter mAdapter;
+    public static final String EXTRA_CUSTOMER_NAME =
+            "package com.example.room.EXTRA_CUSTOMER_NAME";
+    private static final String TAG = "ContactsActivity";
+
+    private CustomerViewModel customerViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +61,14 @@ public class ContactsActivity extends AppCompatActivity {
 
         mAdapter.setOnItemClickListener(new ContactAdapter.OnItemClickListener() {
             @Override
-            public void onItemClicked(Contact Contact) {
-                Toast.makeText(ContactsActivity.this, "Hi and bye", Toast.LENGTH_SHORT).show();
-                // TODO: add the contact to dataBase to be displayed
-                onBackPressed();
+            public void onItemClicked(Contact contact) {
+                String customerName = contact.getContactName();
+                Toast.makeText(ContactsActivity.this, "Customer selected", Toast.LENGTH_SHORT).show();
+                Intent data = new Intent();
+                data.putExtra(EXTRA_CUSTOMER_NAME, customerName);
+
+                setResult(RESULT_OK, data);
+                finish();
             }
         });
 
