@@ -28,8 +28,11 @@ public class CustomerViewModel extends AndroidViewModel {
         repository.insert(customer);
     }
 
+    public void update(Customer customer) {
+        repository.update(customer);
+    }
+
     public LiveData<List<Customer>> getAllCustomers() {
         return allCustomers;
     }
-
 }

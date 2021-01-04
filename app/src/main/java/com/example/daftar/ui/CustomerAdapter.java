@@ -16,7 +16,8 @@ import java.util.List;
 
 
 public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.CustomerHolder> {
-    private List<Customer> customers = new ArrayList<>();
+    private List<Customer> mCustomersList = new ArrayList<>();
+    private OnItemClickListener listener;
 
     @NonNull
     @Override
@@ -26,18 +27,18 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
 
     @Override
     public void onBindViewHolder(@NonNull CustomerHolder holder, int position) {
-        holder.customerName.setText(customers.get(position).getCustomerName());
-        holder.money.setText(customers.get(position).getTotalCash());
-        holder.details.setText(customers.get(position).getDetails());
+        holder.customerName.setText(mCustomersList.get(position).getCustomerName());
+        holder.money.setText(mCustomersList.get(position).getTotalCash());
+        holder.details.setText(mCustomersList.get(position).getDetails());
     }
 
     @Override
     public int getItemCount() {
-        return customers.size();
+        return mCustomersList.size();
     }
 
     public void setList(List<Customer> customers) {
-        this.customers = customers;
+        this.mCustomersList = customers;
         notifyDataSetChanged();
     }
 
@@ -51,11 +52,30 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
             customerName = itemView.findViewById(R.id.customer_name);
             money = itemView.findViewById(R.id.money_amount);
             details = itemView.findViewById(R.id.money_details);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (listener != null && position != RecyclerView.NO_POSITION)
+                            listener.onItemClicked(mCustomersList.get(position));
+                    }
+                }
+            });
         }
     }
 
+    public interface OnItemClickListener {
+        void onItemClicked(Customer customer);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
     public Customer getCustomerAt(int position) {
-        return customers.get(position);
+        return mCustomersList.get(position);
     }
 
 }

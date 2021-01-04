@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
@@ -18,16 +19,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.daftar.R;
+import com.example.daftar.model.Contact;
 import com.example.daftar.model.Customer;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
+
+import static com.example.daftar.ui.ContactsActivity.EXTRA_CUSTOMER_NAME;
 
 public class FragmentDashboard extends Fragment {
 
     private CustomerViewModel customerViewModel;
     private static final String TAG = "FragmentDashboard";
     public static final int ADD_Customer_REQUEST = 1;
+    public static final int OPEN_TRANSACTION_ACTIVITY_REQUEST = 13;
 
     public FragmentDashboard() {
         // Required empty public constructor
@@ -60,6 +65,16 @@ public class FragmentDashboard extends Fragment {
                 startActivityForResult(intent, ADD_Customer_REQUEST);
             }
         });
+
+        mAdapter.setOnItemClickListener(new CustomerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClicked(Customer customer) {
+                Intent intent = new Intent(v.getContext(), TransactionActivity.class);
+                intent.putExtra(EXTRA_CUSTOMER_NAME, customer.getCustomerName());
+                startActivity(intent);
+            }
+        });
+
         return v;
     }
 
@@ -67,7 +82,7 @@ public class FragmentDashboard extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ADD_Customer_REQUEST) {
-            String customerName = data.getStringExtra(ContactsActivity.EXTRA_CUSTOMER_NAME);
+            String customerName = data.getStringExtra(EXTRA_CUSTOMER_NAME);
             Customer customer = new Customer(customerName, "0", "دين");
             customerViewModel.insert(customer);
         }
