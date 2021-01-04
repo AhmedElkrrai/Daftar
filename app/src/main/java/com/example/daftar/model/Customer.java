@@ -1,14 +1,36 @@
 package com.example.daftar.model;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "customer_table")
 public class Customer {
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
     private String customerName;
-    private String money;
+    private String totalCash;
     private String details;
+
+    public Customer(int id, String customerName, String totalCash, String details) {
+        this.id = id;
+        this.customerName = customerName;
+        this.totalCash = totalCash;
+        this.details = details;
+    }
 
     public Customer(String customerName, String money, String details) {
         this.customerName = customerName;
-        this.money = money;
+        this.totalCash = money;
         this.details = details;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getCustomerName() {
@@ -19,12 +41,12 @@ public class Customer {
         this.customerName = customerName;
     }
 
-    public String getMoney() {
-        return money;
+    public String getTotalCash() {
+        return totalCash;
     }
 
-    public void setMoney(String money) {
-        this.money = money;
+    public void setTotalCash(String totalCash) {
+        this.totalCash = totalCash;
     }
 
     public String getDetails() {

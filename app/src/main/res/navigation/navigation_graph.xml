@@ -6,12 +6,12 @@
     app:startDestination="@id/navigation_home">
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.daftar.FragmentHome"
+        android:name="com.example.daftar.ui.FragmentHome"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home"/>
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.example.daftar.FragmentDashboard"
+        android:name="com.example.daftar.ui.FragmentDashboard"
         android:label="fragment_dashboard"
         tools:layout="@layout/fragment_dashboard" />
 

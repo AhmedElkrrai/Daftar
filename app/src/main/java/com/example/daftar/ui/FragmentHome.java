@@ -1,4 +1,4 @@
-package com.example.daftar;
+package com.example.daftar.ui;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import com.example.daftar.R;
 
 
 public class FragmentHome extends Fragment {

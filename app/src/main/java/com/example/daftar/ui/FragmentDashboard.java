@@ -1,4 +1,4 @@
-package com.example.daftar;
+package com.example.daftar.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.daftar.R;
 import com.example.daftar.model.Customer;
 import com.example.daftar.ui.ContactsActivity;
 import com.example.daftar.ui.CustomerAdapter;

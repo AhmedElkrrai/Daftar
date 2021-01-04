@@ -14,9 +14,9 @@ import com.example.daftar.model.Contact;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactHolder> {
     private List<Contact> mContactsList = new ArrayList<>();
+    private OnItemClickListener listener;
 
     @NonNull
     @Override
@@ -40,13 +40,32 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactH
         notifyDataSetChanged();
     }
 
-    public static class ContactHolder extends RecyclerView.ViewHolder {
+    public class ContactHolder extends RecyclerView.ViewHolder {
         public TextView contact_name_TV, contact_phone_num_TV;
 
         public ContactHolder(@NonNull View itemView) {
             super(itemView);
             contact_name_TV = itemView.findViewById(R.id.contact_name);
             contact_phone_num_TV = itemView.findViewById(R.id.phone_num);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (listener != null && position != RecyclerView.NO_POSITION)
+                            listener.onItemClicked(mContactsList.get(position));
+                    }
+                }
+            });
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClicked(Contact Contact);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 }

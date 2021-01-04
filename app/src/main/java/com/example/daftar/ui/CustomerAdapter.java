@@ -27,7 +27,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
     @Override
     public void onBindViewHolder(@NonNull CustomerHolder holder, int position) {
         holder.customerName.setText(customers.get(position).getCustomerName());
-        holder.money.setText(customers.get(position).getMoney());
+        holder.money.setText(customers.get(position).getTotalCash());
         holder.details.setText(customers.get(position).getDetails());
     }
 

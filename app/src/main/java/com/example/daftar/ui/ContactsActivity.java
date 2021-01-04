@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.widget.Toast;
 
 import com.example.daftar.R;
 import com.example.daftar.model.Contact;
@@ -24,7 +25,7 @@ import java.util.Set;
 
 public class ContactsActivity extends AppCompatActivity {
 
-    private final int READ_CONTACS_CODE = 123;
+    private final int READ_CONTACTS_CODE = 123;
     private List<Contact> mContactsList;
     private ContactAdapter mAdapter;
 
@@ -40,10 +41,6 @@ public class ContactsActivity extends AppCompatActivity {
 
         mContactsList = new ArrayList<>();
 
-//        mContactsList.add(new Contact("ahmed", "1223444"));
-//        mContactsList.add(new Contact("ahmed", "1226644"));
-//        mContactsList.add(new Contact("ahmed", "847756"));
-
         mAdapter = new ContactAdapter();
         mAdapter.setList(mContactsList);
 
@@ -53,6 +50,15 @@ public class ContactsActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(ContactsActivity.this, Manifest.permission.READ_CONTACTS)
                 == PackageManager.PERMISSION_GRANTED)
             loadContacts();
+
+        mAdapter.setOnItemClickListener(new ContactAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClicked(Contact Contact) {
+                Toast.makeText(ContactsActivity.this, "Hi and bye", Toast.LENGTH_SHORT).show();
+                // TODO: add the contact to dataBase to be displayed
+                onBackPressed();
+            }
+        });
 
     }
 
@@ -106,12 +112,12 @@ public class ContactsActivity extends AppCompatActivity {
                     .setTitle("Permission needed")
                     .setMessage("This permission is needed")
                     .setPositiveButton("ok", (dialog, which) -> ActivityCompat.requestPermissions(ContactsActivity.this,
-                            new String[]{Manifest.permission.READ_CONTACTS}, READ_CONTACS_CODE))
+                            new String[]{Manifest.permission.READ_CONTACTS}, READ_CONTACTS_CODE))
                     .setNegativeButton("cancel", (dialog, which) -> dialog.dismiss())
                     .create().show();
         } else {
             ActivityCompat.requestPermissions(ContactsActivity.this,
-                    new String[]{Manifest.permission.READ_CONTACTS}, READ_CONTACS_CODE);
+                    new String[]{Manifest.permission.READ_CONTACTS}, READ_CONTACTS_CODE);
         }
     }
 
