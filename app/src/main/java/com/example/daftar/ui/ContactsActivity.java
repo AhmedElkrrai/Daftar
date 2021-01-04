@@ -18,7 +18,9 @@ import com.example.daftar.R;
 import com.example.daftar.model.Contact;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ContactsActivity extends AppCompatActivity {
 
@@ -56,7 +58,7 @@ public class ContactsActivity extends AppCompatActivity {
 
     private void loadContacts() {
         ContentResolver contentResolver = getContentResolver();
-        Contact contact = null;
+        Contact contact;
         Cursor cursor
                 = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
         if (cursor.getCount() > 0) {
@@ -71,12 +73,18 @@ public class ContactsActivity extends AppCompatActivity {
                             , ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?"
                             , new String[]{id}, null);
 
+                    Set<String> hashSet = new HashSet<>();
+
                     while (cursor2.moveToNext()) {
                         String phoneNumber
                                 = cursor2.getString(cursor2.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                        contact = new Contact(name, phoneNumber);
-                        mContactsList.add(contact);
-                        mAdapter.notifyDataSetChanged();
+                        phoneNumber = phoneNumber.replace(" ", "");
+                        if (!hashSet.contains(phoneNumber)) {
+                            contact = new Contact(name, phoneNumber);
+                            mContactsList.add(contact);
+                            mAdapter.notifyDataSetChanged();
+                            hashSet.add(phoneNumber);
+                        }
                     }
                     cursor2.close();
                 }
