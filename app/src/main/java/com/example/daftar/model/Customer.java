@@ -1,6 +1,6 @@
-package com.example.daftar;
+package com.example.daftar.model;
 
-class Customer {
+public class Customer {
     private String customerName;
     private String money;
     private String details;

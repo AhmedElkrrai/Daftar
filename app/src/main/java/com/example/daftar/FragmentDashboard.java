@@ -1,6 +1,7 @@
 package com.example.daftar;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,16 +12,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.daftar.model.Customer;
+import com.example.daftar.ui.ContactsActivity;
+import com.example.daftar.ui.CustomerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentDashboard extends Fragment {
-
-    private RecyclerView mRecyclerView;
-    private CustomerAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
 
     List<Customer> mCustomersList;
 
@@ -32,28 +32,28 @@ public class FragmentDashboard extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dashboard, container, false);
         mCustomersList = new ArrayList<>();
-        mRecyclerView = v.findViewById(R.id.recycler_view);
-        mLayoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView mRecyclerView = v.findViewById(R.id.recycler_view);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
 
-        mAdapter = new CustomerAdapter();
+        CustomerAdapter mAdapter = new CustomerAdapter();
         mAdapter.setList(mCustomersList);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
-        Customer customer = new Customer("أحمد", "3444", "دين");
-
         FloatingActionButton floatingActionButton = v.findViewById(R.id.add_button);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCustomersList.add(customer);
-                mAdapter.notifyDataSetChanged();
+                Intent intent = new Intent(v.getContext(), ContactsActivity.class);
+                startActivity(intent);
             }
         });
 
         return v;
     }
+
+
 
     @Override
     public void onAttach(@NonNull Context context) {

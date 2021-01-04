@@ -1,4 +1,4 @@
-package com.example.daftar;
+package com.example.daftar.ui;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +8,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.daftar.model.Customer;
+import com.example.daftar.R;
+
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.CustomerHolder> {
     private List<Customer> customers = new ArrayList<>();

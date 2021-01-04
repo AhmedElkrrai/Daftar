@@ -1,4 +1,4 @@
-package com.example.daftar;
+package com.example.daftar.ui;
 
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +9,7 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.daftar.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
