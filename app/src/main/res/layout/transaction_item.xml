@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="4dp"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -14,7 +14,7 @@
             android:id="@+id/transaction_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:text="2021-2-13" />
 
         <TextView
@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/transaction_date"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:text="ملاحظه" />
 
         <TextView
@@ -42,8 +42,8 @@
             android:id="@+id/transaction_cash"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/money_unit"
-            android:paddingLeft="6dp"
+            android:layout_toEndOf="@+id/money_unit"
+            android:paddingStart="6dp"
             android:text="1000" />
 
     </RelativeLayout>
