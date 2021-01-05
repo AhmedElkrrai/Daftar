@@ -33,9 +33,9 @@ public class ContactsActivity extends AppCompatActivity {
     private ContactAdapter mAdapter;
     public static final String EXTRA_CUSTOMER_NAME =
             "package com.example.room.EXTRA_CUSTOMER_NAME";
+    public static final String EXTRA_CUSTOMER_NUMBER =
+            "package com.example.room.EXTRA_CUSTOMER_NUMBER";
     private static final String TAG = "ContactsActivity";
-
-    private CustomerViewModel customerViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +66,7 @@ public class ContactsActivity extends AppCompatActivity {
                 Toast.makeText(ContactsActivity.this, "Customer selected", Toast.LENGTH_SHORT).show();
                 Intent data = new Intent();
                 data.putExtra(EXTRA_CUSTOMER_NAME, customerName);
+                data.putExtra(EXTRA_CUSTOMER_NUMBER, contact.getPhoneNumber());
 
                 setResult(RESULT_OK, data);
                 finish();

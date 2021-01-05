@@ -25,5 +25,4 @@ public abstract class CustomerDatabase extends RoomDatabase {
 
         return instance;
     }
-
 }

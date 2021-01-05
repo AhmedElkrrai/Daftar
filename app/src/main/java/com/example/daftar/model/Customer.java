@@ -11,11 +11,21 @@ public class Customer {
     private String customerName;
     private String totalCash;
     private String details;
+    private String customerNumber;
 
-    public Customer(String customerName, String totalCash, String details) {
+    public Customer(String customerName, String totalCash, String details, String customerNumber) {
         this.customerName = customerName;
         this.totalCash = totalCash;
         this.details = details;
+        this.customerNumber = customerNumber;
+    }
+
+    public String getCustomerNumber() {
+        return customerNumber;
+    }
+
+    public void setCustomerNumber(String customerNumber) {
+        this.customerNumber = customerNumber;
     }
 
     public void setId(int id) {

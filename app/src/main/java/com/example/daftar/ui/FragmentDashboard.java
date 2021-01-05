@@ -3,12 +3,9 @@ package com.example.daftar.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,20 +16,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.daftar.R;
-import com.example.daftar.model.Contact;
 import com.example.daftar.model.Customer;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
 import static com.example.daftar.ui.ContactsActivity.EXTRA_CUSTOMER_NAME;
+import static com.example.daftar.ui.ContactsActivity.EXTRA_CUSTOMER_NUMBER;
+import static com.example.daftar.ui.TransactionActivity.TRANSACTION_TYPE_GIVEN;
 
 public class FragmentDashboard extends Fragment {
 
     private CustomerViewModel customerViewModel;
     private static final String TAG = "FragmentDashboard";
     public static final int ADD_Customer_REQUEST = 1;
-    public static final int OPEN_TRANSACTION_ACTIVITY_REQUEST = 13;
 
     public FragmentDashboard() {
         // Required empty public constructor
@@ -40,8 +37,8 @@ public class FragmentDashboard extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        RecyclerView mRecyclerView = v.findViewById(R.id.recycler_view);
+        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        RecyclerView mRecyclerView = view.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
 
         CustomerAdapter mAdapter = new CustomerAdapter();
@@ -57,7 +54,7 @@ public class FragmentDashboard extends Fragment {
             }
         });
 
-        FloatingActionButton floatingActionButton = v.findViewById(R.id.add_button);
+        FloatingActionButton floatingActionButton = view.findViewById(R.id.add_button);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,13 +66,14 @@ public class FragmentDashboard extends Fragment {
         mAdapter.setOnItemClickListener(new CustomerAdapter.OnItemClickListener() {
             @Override
             public void onItemClicked(Customer customer) {
-                Intent intent = new Intent(v.getContext(), TransactionActivity.class);
+                Intent intent = new Intent(view.getContext(), TransactionActivity.class);
                 intent.putExtra(EXTRA_CUSTOMER_NAME, customer.getCustomerName());
+                intent.putExtra(EXTRA_CUSTOMER_NUMBER, customer.getCustomerNumber());
                 startActivity(intent);
             }
         });
 
-        return v;
+        return view;
     }
 
     @Override
@@ -83,7 +81,8 @@ public class FragmentDashboard extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ADD_Customer_REQUEST) {
             String customerName = data.getStringExtra(EXTRA_CUSTOMER_NAME);
-            Customer customer = new Customer(customerName, "0", "دين");
+            String customerNumber = data.getStringExtra(EXTRA_CUSTOMER_NUMBER);
+            Customer customer = new Customer(customerName, "0", TRANSACTION_TYPE_GIVEN, customerNumber);
             customerViewModel.insert(customer);
         }
     }

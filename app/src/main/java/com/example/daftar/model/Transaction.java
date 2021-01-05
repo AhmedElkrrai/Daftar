@@ -1,6 +1,13 @@
 package com.example.daftar.model;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "transaction_table")
 public class Transaction {
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
     private String note;
     private String date;
     private String cash;
@@ -14,10 +21,12 @@ public class Transaction {
         this.type = type;
     }
 
-    public Transaction(String date, String cash, String type) {
-        this.date = date;
-        this.cash = cash;
-        this.type = type;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getType() {
