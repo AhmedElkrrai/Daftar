@@ -74,20 +74,24 @@ public class TransactionActivity extends AppCompatActivity {
         given_cash_TV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(TransactionActivity.this, CashActivity.class);
+                startActivity(intent);
 //                Intent intent = new Intent(TransactionActivity.this, CashActivity.class);
 //                startActivityForResult(intent, TRANSACTION_TYPE_GIVEN_REQUEST);
-                Transaction transaction = new Transaction("", finalDate, "1000", TRANSACTION_TYPE_GIVEN);
-                transactionViewModel.insert(transaction);
+//                Transaction transaction = new Transaction("", finalDate, "1000", TRANSACTION_TYPE_GIVEN);
+//                transactionViewModel.insert(transaction);
             }
         });
 
         taken_cash_TV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(TransactionActivity.this, CashActivity.class);
+                startActivity(intent);
 //                Intent intent = new Intent(TransactionActivity.this, CashActivity.class);
 //                startActivityForResult(intent, TRANSACTION_TYPE_TAKEN_REQUEST);
-                Transaction transaction = new Transaction("", finalDate, "1000", TRANSACTION_TYPE_TAKEN);
-                transactionViewModel.insert(transaction);
+//                Transaction transaction = new Transaction("", finalDate, "1000", TRANSACTION_TYPE_TAKEN);
+//                transactionViewModel.insert(transaction);
             }
         });
     }
