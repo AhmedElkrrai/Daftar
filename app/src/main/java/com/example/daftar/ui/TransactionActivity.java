@@ -35,6 +35,7 @@ public class TransactionActivity extends AppCompatActivity {
     public static final String TRANSACTION_TYPE_TAKEN = "أداء";
 
     private TransactionViewModel transactionViewModel;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +43,12 @@ public class TransactionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_transaction);
 
         TextView transactionCustomerNameTV = findViewById(R.id.transaction_customer_name);
-        Button given_cash_TV = findViewById(R.id.given_cash);
-        Button taken_cash_TV = findViewById(R.id.taken_cash);
+        Button givenCashBT = findViewById(R.id.given_cash);
+        Button takenCashBT = findViewById(R.id.taken_cash);
 
-        Intent intent = getIntent();
-        transactionCustomerNameTV.setText(intent.getStringExtra(EXTRA_CUSTOMER_NAME));
+        intent = getIntent();
+        String customerName = intent.getStringExtra(EXTRA_CUSTOMER_NAME);
+        transactionCustomerNameTV.setText(customerName);
         String customerPhoneNumber = intent.getStringExtra(EXTRA_CUSTOMER_NUMBER);
 
         RecyclerView mRecyclerView = findViewById(R.id.transaction_recycler_view);
@@ -57,8 +59,10 @@ public class TransactionActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
-        List<Transaction> mTransactionList = new ArrayList<>();
-        mAdapter.setList(mTransactionList);
+        mAdapter.setCustomerName(customerName);
+
+//        List<Transaction> mTransactionList = new ArrayList<>();
+//        mAdapter.setList(mTransactionList);
 
         transactionViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
         transactionViewModel.getAllTransactions().observe(TransactionActivity.this, new Observer<List<Transaction>>() {
@@ -68,7 +72,7 @@ public class TransactionActivity extends AppCompatActivity {
             }
         });
 
-        given_cash_TV.setOnClickListener(new View.OnClickListener() {
+        givenCashBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TransactionActivity.this, CashActivity.class);
@@ -76,7 +80,7 @@ public class TransactionActivity extends AppCompatActivity {
             }
         });
 
-        taken_cash_TV.setOnClickListener(new View.OnClickListener() {
+        takenCashBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TransactionActivity.this, CashActivity.class);
@@ -92,14 +96,16 @@ public class TransactionActivity extends AppCompatActivity {
         String date = now.toString();
         date = date.substring(0, 11);
 
+        String customerName = intent.getStringExtra(EXTRA_CUSTOMER_NAME);
+
         String cash = data.getStringExtra(EXTRA_CASH);
         String note = data.getStringExtra(EXTRA_NOTE);
 
         if (requestCode == TRANSACTION_TYPE_GIVEN_REQUEST) {
-            Transaction transaction = new Transaction(note, date, cash, TRANSACTION_TYPE_GIVEN);
+            Transaction transaction = new Transaction(note, date, cash, TRANSACTION_TYPE_GIVEN, customerName);
             transactionViewModel.insert(transaction);
         } else if (requestCode == TRANSACTION_TYPE_TAKEN_REQUEST) {
-            Transaction transaction = new Transaction(note, date, cash, TRANSACTION_TYPE_TAKEN);
+            Transaction transaction = new Transaction(note, date, cash, TRANSACTION_TYPE_TAKEN, customerName);
             transactionViewModel.insert(transaction);
         }
 

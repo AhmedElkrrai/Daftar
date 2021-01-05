@@ -17,6 +17,11 @@ import java.util.List;
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionHolder> {
     private List<Transaction> mTransactionList = new ArrayList<>();
+    private String customerName;
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
 
     @NonNull
     @Override
@@ -38,7 +43,12 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     }
 
     public void setList(List<Transaction> transactionList) {
-        this.mTransactionList = transactionList;
+        List<Transaction> customerTransactionList = new ArrayList<>();
+        for (int i = 0; i < transactionList.size(); i++) {
+            if (transactionList.get(i).getCustomerName().equals(customerName))
+                customerTransactionList.add(transactionList.get(i));
+        }
+        this.mTransactionList = customerTransactionList;
         notifyDataSetChanged();
     }
 

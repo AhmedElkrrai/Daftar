@@ -12,13 +12,23 @@ public class Transaction {
     private String date;
     private String cash;
     private String type;
+    private String customerName;
 
 
-    public Transaction(String note, String date, String cash, String type) {
+    public Transaction(String note, String date, String cash, String type, String customerName) {
         this.note = note;
         this.date = date;
         this.cash = cash;
         this.type = type;
+        this.customerName = customerName;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
     public int getId() {

@@ -13,13 +13,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="12dp"
+        android:textSize="22sp"
+        android:layout_margin="8dp"
         android:text="Customer Name" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp">
+        android:layout_margin="4dp">
 
         <ImageView
             android:id="@+id/call"
@@ -42,7 +43,8 @@
             android:layout_below="@+id/due_payment_text"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="8dp"
-            android:text="@string/_1000"
+            android:paddingEnd="8dp"
+            android:text="0"
             android:textSize="38sp" />
 
         <TextView
