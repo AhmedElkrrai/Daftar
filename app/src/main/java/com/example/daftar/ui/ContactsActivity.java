@@ -28,7 +28,7 @@ import java.util.Set;
 
 public class ContactsActivity extends AppCompatActivity {
 
-    private final int READ_CONTACTS_CODE = 123;
+    private final int READ_CONTACTS_CODE = 12;
     private List<Contact> mContactsList;
     private ContactAdapter mAdapter;
     public static final String EXTRA_CUSTOMER_NAME =

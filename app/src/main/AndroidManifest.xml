@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Daftar">
-        <activity android:name=".ui.CashActivity"></activity>
+        <activity android:name=".ui.CashActivity" />
         <activity android:name=".ui.TransactionActivity" />
         <activity android:name=".ui.ContactsActivity" />
         <activity android:name=".ui.MainActivity">

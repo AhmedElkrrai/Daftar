@@ -1,5 +1,6 @@
 package com.example.daftar.ui;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -20,13 +21,15 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.daftar.ui.CashActivity.EXTRA_CASH;
+import static com.example.daftar.ui.CashActivity.EXTRA_NOTE;
 import static com.example.daftar.ui.ContactsActivity.EXTRA_CUSTOMER_NAME;
 import static com.example.daftar.ui.ContactsActivity.EXTRA_CUSTOMER_NUMBER;
 
 public class TransactionActivity extends AppCompatActivity {
 
-    public static final int TRANSACTION_TYPE_GIVEN_REQUEST = 2433;
-    public static final int TRANSACTION_TYPE_TAKEN_REQUEST = -2433;
+    public static final int TRANSACTION_TYPE_GIVEN_REQUEST = 2;
+    public static final int TRANSACTION_TYPE_TAKEN_REQUEST = 4;
 
     public static final String TRANSACTION_TYPE_GIVEN = "دين";
     public static final String TRANSACTION_TYPE_TAKEN = "أداء";
@@ -38,12 +41,12 @@ public class TransactionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction);
 
-        TextView transaction_customer_name_TV = findViewById(R.id.transaction_customer_name);
+        TextView transactionCustomerNameTV = findViewById(R.id.transaction_customer_name);
         Button given_cash_TV = findViewById(R.id.given_cash);
         Button taken_cash_TV = findViewById(R.id.taken_cash);
 
         Intent intent = getIntent();
-        transaction_customer_name_TV.setText(intent.getStringExtra(EXTRA_CUSTOMER_NAME));
+        transactionCustomerNameTV.setText(intent.getStringExtra(EXTRA_CUSTOMER_NAME));
         String customerPhoneNumber = intent.getStringExtra(EXTRA_CUSTOMER_NUMBER);
 
         RecyclerView mRecyclerView = findViewById(R.id.transaction_recycler_view);
@@ -65,21 +68,11 @@ public class TransactionActivity extends AppCompatActivity {
             }
         });
 
-        LocalDateTime now = LocalDateTime.now();
-        String date = now.toString();
-        date = date.substring(0, 11);
-
-        String finalDate = date;
-
         given_cash_TV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TransactionActivity.this, CashActivity.class);
-                startActivity(intent);
-//                Intent intent = new Intent(TransactionActivity.this, CashActivity.class);
-//                startActivityForResult(intent, TRANSACTION_TYPE_GIVEN_REQUEST);
-//                Transaction transaction = new Transaction("", finalDate, "1000", TRANSACTION_TYPE_GIVEN);
-//                transactionViewModel.insert(transaction);
+                startActivityForResult(intent, TRANSACTION_TYPE_GIVEN_REQUEST);
             }
         });
 
@@ -87,12 +80,28 @@ public class TransactionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TransactionActivity.this, CashActivity.class);
-                startActivity(intent);
-//                Intent intent = new Intent(TransactionActivity.this, CashActivity.class);
-//                startActivityForResult(intent, TRANSACTION_TYPE_TAKEN_REQUEST);
-//                Transaction transaction = new Transaction("", finalDate, "1000", TRANSACTION_TYPE_TAKEN);
-//                transactionViewModel.insert(transaction);
+                startActivityForResult(intent, TRANSACTION_TYPE_TAKEN_REQUEST);
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        LocalDateTime now = LocalDateTime.now();
+        String date = now.toString();
+        date = date.substring(0, 11);
+
+        String cash = data.getStringExtra(EXTRA_CASH);
+        String note = data.getStringExtra(EXTRA_NOTE);
+
+        if (requestCode == TRANSACTION_TYPE_GIVEN_REQUEST) {
+            Transaction transaction = new Transaction(note, date, cash, TRANSACTION_TYPE_GIVEN);
+            transactionViewModel.insert(transaction);
+        } else if (requestCode == TRANSACTION_TYPE_TAKEN_REQUEST) {
+            Transaction transaction = new Transaction(note, date, cash, TRANSACTION_TYPE_TAKEN);
+            transactionViewModel.insert(transaction);
+        }
+
     }
 }
