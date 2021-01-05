@@ -31,10 +31,13 @@ public class ContactsActivity extends AppCompatActivity {
     private final int READ_CONTACTS_CODE = 12;
     private List<Contact> mContactsList;
     private ContactAdapter mAdapter;
+
     public static final String EXTRA_CUSTOMER_NAME =
             "package com.example.room.EXTRA_CUSTOMER_NAME";
     public static final String EXTRA_CUSTOMER_NUMBER =
             "package com.example.room.EXTRA_CUSTOMER_NUMBER";
+
+
     private static final String TAG = "ContactsActivity";
 
     @Override
@@ -55,10 +58,6 @@ public class ContactsActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
-        if (ContextCompat.checkSelfPermission(ContactsActivity.this, Manifest.permission.READ_CONTACTS)
-                == PackageManager.PERMISSION_GRANTED)
-            loadContacts();
-
         mAdapter.setOnItemClickListener(new ContactAdapter.OnItemClickListener() {
             @Override
             public void onItemClicked(Contact contact) {
@@ -72,7 +71,14 @@ public class ContactsActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (ContextCompat.checkSelfPermission(ContactsActivity.this, Manifest.permission.READ_CONTACTS)
+                == PackageManager.PERMISSION_GRANTED)
+            loadContacts();
     }
 
     private void loadContacts() {

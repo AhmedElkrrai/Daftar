@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.daftar.R;
+import com.example.daftar.model.Contact;
 import com.example.daftar.model.Customer;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -28,8 +30,17 @@ import static com.example.daftar.ui.TransactionActivity.TRANSACTION_TYPE_GIVEN;
 public class FragmentDashboard extends Fragment {
 
     private CustomerViewModel customerViewModel;
-    private static final String TAG = "FragmentDashboard";
-    public static final int ADD_Customer_REQUEST = 1;
+
+    public static final int ADD_CUSTOMER_REQUEST = 1;
+    public static final int UPDATE_CUSTOMER_REQUEST = 2;
+
+    public static final String EXTRA_CUSTOMER_TOTAL_CASH =
+            "package com.example.room.EXTRA_CUSTOMER_TOTAL_CASH";
+    public static final String EXTRA_TRANSACTION_TYPE =
+            "package com.example.room.EXTRA_TRANSACTION_TYPE";
+    public static final String EXTRA_ID =
+            "package com.example.room.EXTRA_ID";
+
 
     public FragmentDashboard() {
         // Required empty public constructor
@@ -59,7 +70,7 @@ public class FragmentDashboard extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), ContactsActivity.class);
-                startActivityForResult(intent, ADD_Customer_REQUEST);
+                startActivityForResult(intent, ADD_CUSTOMER_REQUEST);
             }
         });
 
@@ -69,7 +80,10 @@ public class FragmentDashboard extends Fragment {
                 Intent intent = new Intent(view.getContext(), TransactionActivity.class);
                 intent.putExtra(EXTRA_CUSTOMER_NAME, customer.getCustomerName());
                 intent.putExtra(EXTRA_CUSTOMER_NUMBER, customer.getCustomerNumber());
-                startActivity(intent);
+                intent.putExtra(EXTRA_CUSTOMER_TOTAL_CASH, customer.getTotalCash());
+                intent.putExtra(EXTRA_TRANSACTION_TYPE, customer.getDetails());
+                intent.putExtra(EXTRA_ID, customer.getId());
+                startActivityForResult(intent, UPDATE_CUSTOMER_REQUEST);
             }
         });
 
@@ -79,11 +93,26 @@ public class FragmentDashboard extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ADD_Customer_REQUEST) {
+        if (requestCode == ADD_CUSTOMER_REQUEST) {
             String customerName = data.getStringExtra(EXTRA_CUSTOMER_NAME);
             String customerNumber = data.getStringExtra(EXTRA_CUSTOMER_NUMBER);
             Customer customer = new Customer(customerName, "0", TRANSACTION_TYPE_GIVEN, customerNumber);
             customerViewModel.insert(customer);
+        } else if (requestCode == UPDATE_CUSTOMER_REQUEST) {
+
+            int id = data.getIntExtra(EXTRA_ID, -1);
+            if (id == -1) {
+                Toast.makeText(getActivity(), "Noting to update", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            String customerName = data.getStringExtra(EXTRA_CUSTOMER_NAME);
+            String customerPhoneNumber = data.getStringExtra(EXTRA_CUSTOMER_NUMBER);
+            String totalCash = data.getStringExtra(EXTRA_CUSTOMER_TOTAL_CASH);
+            String transactionType = data.getStringExtra(EXTRA_TRANSACTION_TYPE);
+
+            Customer customer = new Customer(customerName, totalCash, transactionType, customerPhoneNumber);
+            customer.setId(id);
+            customerViewModel.update(customer);
         }
     }
 

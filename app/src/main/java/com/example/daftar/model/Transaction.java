@@ -14,7 +14,6 @@ public class Transaction {
     private String type;
     private String customerName;
 
-
     public Transaction(String note, String date, String cash, String type, String customerName) {
         this.note = note;
         this.date = date;
