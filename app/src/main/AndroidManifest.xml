@@ -12,7 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Daftar">
         <activity android:name=".ui.CashActivity" />
-        <activity android:name=".ui.TransactionActivity" />
+        <activity
+            android:name=".ui.TransactionActivity"
+            android:launchMode="singleTask" />
         <activity android:name=".ui.ContactsActivity" />
         <activity android:name=".ui.MainActivity">
             <intent-filter>

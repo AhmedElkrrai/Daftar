@@ -139,6 +139,4 @@ public class ContactsActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.READ_CONTACTS}, READ_CONTACTS_CODE);
         }
     }
-
-
 }

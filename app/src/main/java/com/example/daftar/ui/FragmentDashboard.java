@@ -23,6 +23,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
 import static com.example.daftar.ui.ContactsActivity.EXTRA_CUSTOMER_NAME;
 import static com.example.daftar.ui.ContactsActivity.EXTRA_CUSTOMER_NUMBER;
 import static com.example.daftar.ui.TransactionActivity.TRANSACTION_TYPE_GIVEN;
@@ -93,12 +94,12 @@ public class FragmentDashboard extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ADD_CUSTOMER_REQUEST) {
+        if (requestCode == ADD_CUSTOMER_REQUEST && resultCode == RESULT_OK) {
             String customerName = data.getStringExtra(EXTRA_CUSTOMER_NAME);
             String customerNumber = data.getStringExtra(EXTRA_CUSTOMER_NUMBER);
             Customer customer = new Customer(customerName, "0", TRANSACTION_TYPE_GIVEN, customerNumber);
             customerViewModel.insert(customer);
-        } else if (requestCode == UPDATE_CUSTOMER_REQUEST) {
+        } else if (requestCode == UPDATE_CUSTOMER_REQUEST && resultCode == RESULT_OK) {
 
             int id = data.getIntExtra(EXTRA_ID, -1);
             if (id == -1) {

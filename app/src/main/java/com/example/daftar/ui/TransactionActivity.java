@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -39,10 +40,10 @@ public class TransactionActivity extends AppCompatActivity {
     private String customerTotalCash;
     private String customerName;
     private String customerPhoneNumber;
-    private String customerTransactionType;
 
     private TransactionViewModel transactionViewModel;
 
+    private static final String TAG = "TransactionActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,7 @@ public class TransactionActivity extends AppCompatActivity {
         customerName = intent.getStringExtra(EXTRA_CUSTOMER_NAME);
         customerTotalCash = intent.getStringExtra(EXTRA_CUSTOMER_TOTAL_CASH);
         customerPhoneNumber = intent.getStringExtra(EXTRA_CUSTOMER_NUMBER);
-        customerTransactionType = intent.getStringExtra(EXTRA_TRANSACTION_TYPE);
+        String customerTransactionType = intent.getStringExtra(EXTRA_TRANSACTION_TYPE);
 
         transactionCustomerNameTV.setText(customerName);
         duePaymentTV.setText(customerTotalCash);
@@ -94,19 +95,24 @@ public class TransactionActivity extends AppCompatActivity {
             }
         });
 
+        Intent i = new Intent(TransactionActivity.this, CashActivity.class);
+
+        i.putExtra(EXTRA_CUSTOMER_NAME, customerName);
+        i.putExtra(EXTRA_CUSTOMER_TOTAL_CASH, customerTotalCash);
+        i.putExtra(EXTRA_CUSTOMER_NUMBER, customerPhoneNumber);
+        i.putExtra(EXTRA_TRANSACTION_TYPE, customerTransactionType);
+
         givenCashBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(TransactionActivity.this, CashActivity.class);
-                startActivityForResult(intent, TRANSACTION_TYPE_GIVEN_REQUEST);
+                startActivityForResult(i, TRANSACTION_TYPE_GIVEN_REQUEST);
             }
         });
 
         takenCashBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(TransactionActivity.this, CashActivity.class);
-                startActivityForResult(intent, TRANSACTION_TYPE_TAKEN_REQUEST);
+                startActivityForResult(i, TRANSACTION_TYPE_TAKEN_REQUEST);
             }
         });
     }
@@ -143,11 +149,14 @@ public class TransactionActivity extends AppCompatActivity {
         String date = now.toString();
         date = date.substring(0, 11);
 
-        assert data != null;
-        String cash = data.getStringExtra(EXTRA_CASH);
-        String note = data.getStringExtra(EXTRA_NOTE);
+        String cash = null, note = null, customerName = null;
+        if (data != null) {
+            cash = data.getStringExtra(EXTRA_CASH);
+            note = data.getStringExtra(EXTRA_NOTE);
+            customerName = data.getStringExtra(EXTRA_CUSTOMER_NAME);
+        }
 
-        if (requestCode == TRANSACTION_TYPE_GIVEN_REQUEST) {
+        if (requestCode == TRANSACTION_TYPE_GIVEN_REQUEST && resultCode == RESULT_OK) {
             Transaction transaction = new Transaction(note, date, cash, TRANSACTION_TYPE_GIVEN, customerName);
 
             int duePayment = Integer.parseInt(customerTotalCash) - Integer.parseInt(cash);
@@ -155,7 +164,7 @@ public class TransactionActivity extends AppCompatActivity {
             transactionViewModel.updateDuePaymentMutableLiveData(duePayment);
 
             transactionViewModel.insert(transaction);
-        } else if (requestCode == TRANSACTION_TYPE_TAKEN_REQUEST) {
+        } else if (requestCode == TRANSACTION_TYPE_TAKEN_REQUEST && resultCode == RESULT_OK) {
             Transaction transaction = new Transaction(note, date, cash, TRANSACTION_TYPE_TAKEN, customerName);
 
             int duePayment = Integer.parseInt(customerTotalCash) + Integer.parseInt(cash);
