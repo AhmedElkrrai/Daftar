@@ -1,43 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12dp">
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/customer_name"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="أحمد بيه" />
+            android:padding="12dp">
 
-        <TextView
-            android:id="@+id/money_amount2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/money_unit" />
+            <TextView
+                android:id="@+id/customer_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="أحمد بيه"
+                android:textColor="#000000"
+                android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/money_amount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/money_amount2"
-            android:paddingLeft="6dp"
-            android:text="@string/_1000" />
+            <TextView
+                android:id="@+id/money_amount2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/money_unit"
+                android:textColor="#4CAF50"
+                android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/money_details"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/money_amount"
-            android:text="دين" />
+            <TextView
+                android:id="@+id/money_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/money_amount2"
+                android:paddingStart="6dp"
+                android:text="@string/_1000"
+                android:textColor="#4CAF50"
+                android:textSize="18sp"
+                tools:ignore="RtlSymmetry" />
 
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/money_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/money_amount"
+                android:hint="@string/debt" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#A4CACAE1"
+            android:paddingTop="18dp" />
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>

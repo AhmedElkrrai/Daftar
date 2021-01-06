@@ -7,10 +7,13 @@
     <string name="Given">أعطيت</string>
     <string name="_1000">1000</string>
     <string name="Taken">تسلمت</string>
-    <string name="Customers">الزبناء</string>
+    <string name="Customers">العملاء</string>
     <string name="_0">(0)</string>
     <string name="alba7th">البحث</string>
-    <string name="money_unit">جنيه</string>
+    <string name="money_unit">ج.م.</string>
     <string name="due_payment">اللازم دفعه</string>
     <string name="note">ملاحظة</string>
+    <string name="payment">أداء</string>
+    <string name="debt">دين</string>
+    <string name="_0eg">0 ج.م.</string>
 </resources>

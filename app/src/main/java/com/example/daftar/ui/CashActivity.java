@@ -26,9 +26,6 @@ public class CashActivity extends AppCompatActivity {
     public static final String EXTRA_NOTE =
             "package com.example.room.EXTRA_NOTE";
 
-    private Intent data;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +35,7 @@ public class CashActivity extends AppCompatActivity {
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
 
-        data = getIntent();
+        Intent data = getIntent();
         String customerName = data.getStringExtra(EXTRA_CUSTOMER_NAME);
 
         binding.confirmCashButton.setOnClickListener(new View.OnClickListener() {
@@ -46,13 +43,15 @@ public class CashActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent();
 
-                String cash = (String) binding.cashTV.getText();
-                cash = String.valueOf(Integer.parseInt(cash));
+                String cash = binding.cashTV.getText().toString();
+                if (!cash.equals(""))
+                    cash = String.valueOf(Integer.parseInt(cash));
                 String note = String.valueOf(binding.noteET.getText());
 
                 intent.putExtra(EXTRA_CASH, cash);
                 intent.putExtra(EXTRA_NOTE, note);
                 intent.putExtra(EXTRA_CUSTOMER_NAME, customerName);
+
                 if (cash.equals("") || cash.equals("0")) {
                     Toast.makeText(CashActivity.this, "Please Enter Transaction.", Toast.LENGTH_SHORT).show();
                     return;
@@ -65,7 +64,7 @@ public class CashActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        data = getIntent();
+        Intent data = getIntent();
         String customerName = data.getStringExtra(EXTRA_CUSTOMER_NAME);
         String totalCash = data.getStringExtra(EXTRA_CUSTOMER_TOTAL_CASH);
         String phoneNumber = data.getStringExtra(EXTRA_CUSTOMER_NUMBER);

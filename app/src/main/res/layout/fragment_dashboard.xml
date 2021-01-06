@@ -32,16 +32,22 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="@string/Given" />
+                        android:hint="@string/debt" />
 
                     <TextView
+                        android:id="@+id/total_debt_TV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:hint="@string/_1000" />
-
-
+                        android:text="@string/_0eg"
+                        android:textColor="#F44336"
+                        android:textSize="24sp" />
                 </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#A4CACAE1" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -53,13 +59,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="@string/Taken" />
+                        android:hint="@string/payment" />
 
                     <TextView
+                        android:id="@+id/total_payment_TV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:hint="@string/_1000" />
+                        android:text="@string/_0eg"
+                        android:textColor="#4CAF50"
+                        android:textSize="24sp" />
 
                 </LinearLayout>
 
@@ -76,18 +85,18 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:text="@string/Customers"
-                    android:textColor="@android:color/holo_blue_dark" />
+                    android:textColor="#3F51B5" />
 
                 <TextView
                     android:id="@+id/num_of_customers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@+id/customers_title"
+                    android:layout_toStartOf="@+id/customers_title"
                     android:hint="@string/_0" />
 
             </RelativeLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -96,21 +105,22 @@
                 <ImageButton
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    app:backgroundTint="#3F51B5" />
+                    android:background="@drawable/round"
+                    app:backgroundTint="#E8EAF6" />
 
                 <EditText
+                    android:layout_alignParentEnd="true"
                     android:id="@+id/search_bar"
-                    android:layout_width="0dp"
+                    android:layout_width="280dp"
                     android:layout_height="48dp"
-                    android:layout_weight="1"
                     android:background="@drawable/edit_round"
                     android:hint="@string/alba7th"
-                    android:inputType="text"
                     android:imeOptions="actionDone"
+                    android:inputType="text"
                     android:padding="14dp"
                     android:textAlignment="textStart" />
 
-            </LinearLayout>
+            </RelativeLayout>
 
         </LinearLayout>
 
@@ -138,10 +148,8 @@
             android:padding="33dp"
             android:paddingBottom="64dp"
             android:src="@drawable/ic_add"
-            app:backgroundTint="#3F51B5" />
+            app:backgroundTint="#1976D2" />
 
     </LinearLayout>
 
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
-

@@ -58,6 +58,7 @@ public class FragmentDashboard extends Fragment {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         EditText searchView = view.findViewById(R.id.search_bar);
+        TextView numberOfCustomersTV = view.findViewById(R.id.num_of_customers);
 
         RecyclerView mRecyclerView = view.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
@@ -71,6 +72,8 @@ public class FragmentDashboard extends Fragment {
         customerViewModel.getAllCustomers().observe(getActivity(), new Observer<List<Customer>>() {
             @Override
             public void onChanged(List<Customer> customers) {
+                String numberOfCustomers = "(" + customers.size() + ") ";
+                numberOfCustomersTV.setText(numberOfCustomers);
                 mAdapter.setList(customers);
             }
         });
