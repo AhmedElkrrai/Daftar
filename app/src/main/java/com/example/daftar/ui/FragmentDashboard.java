@@ -3,9 +3,15 @@ package com.example.daftar.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,7 +23,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.daftar.R;
-import com.example.daftar.model.Contact;
 import com.example.daftar.model.Customer;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -42,6 +47,7 @@ public class FragmentDashboard extends Fragment {
     public static final String EXTRA_ID =
             "package com.example.room.EXTRA_ID";
 
+    private static final String TAG = "FragmentDashboard";
 
     public FragmentDashboard() {
         // Required empty public constructor
@@ -50,6 +56,9 @@ public class FragmentDashboard extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
+
+        EditText searchView = view.findViewById(R.id.search_bar);
+
         RecyclerView mRecyclerView = view.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
 
@@ -85,6 +94,18 @@ public class FragmentDashboard extends Fragment {
                 intent.putExtra(EXTRA_TRANSACTION_TYPE, customer.getDetails());
                 intent.putExtra(EXTRA_ID, customer.getId());
                 startActivityForResult(intent, UPDATE_CUSTOMER_REQUEST);
+            }
+        });
+
+        searchView.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                String query = searchView.getText().toString();
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    mAdapter.getFilter().filter(query);
+                    return true;
+                }
+                return false;
             }
         });
 

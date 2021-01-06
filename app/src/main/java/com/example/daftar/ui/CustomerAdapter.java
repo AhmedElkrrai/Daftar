@@ -3,6 +3,8 @@ package com.example.daftar.ui;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,9 +16,9 @@ import com.example.daftar.R;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.CustomerHolder> {
+public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.CustomerHolder> implements Filterable {
     private List<Customer> mCustomersList = new ArrayList<>();
+    private List<Customer> mSearchListFull;
     private OnItemClickListener listener;
 
     @NonNull
@@ -39,6 +41,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
 
     public void setList(List<Customer> customers) {
         this.mCustomersList = customers;
+        mSearchListFull = new ArrayList<>(customers);
         notifyDataSetChanged();
     }
 
@@ -74,8 +77,35 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         this.listener = listener;
     }
 
-    public Customer getCustomerAt(int position) {
-        return mCustomersList.get(position);
+    @Override
+    public Filter getFilter() {
+        return searchFilter;
     }
 
+    private Filter searchFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Customer> filteredList = new ArrayList<>();
+            if (constraint == null || constraint.length() == 0)
+                filteredList.addAll(mSearchListFull);
+            else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for (Customer customer : mSearchListFull) {
+                    if (customer.getCustomerName().toLowerCase().contains(filterPattern))
+                        filteredList.add(customer);
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            mCustomersList.clear();
+            mCustomersList.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
 }

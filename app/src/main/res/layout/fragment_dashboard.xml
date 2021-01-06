@@ -105,6 +105,8 @@
                     android:layout_weight="1"
                     android:background="@drawable/edit_round"
                     android:hint="@string/alba7th"
+                    android:inputType="text"
+                    android:imeOptions="actionDone"
                     android:padding="14dp"
                     android:textAlignment="textStart" />
 
@@ -114,9 +116,9 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
-            android:paddingBottom="48dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingBottom="48dp"
             tools:listitem="@layout/customer_item" />
 
     </LinearLayout>
@@ -130,11 +132,11 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_button"
-            android:paddingBottom="64dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:padding="33dp"
+            android:paddingBottom="64dp"
             android:src="@drawable/ic_add"
             app:backgroundTint="#3F51B5" />
 

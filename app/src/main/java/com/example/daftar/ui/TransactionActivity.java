@@ -2,24 +2,28 @@ package com.example.daftar.ui;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.daftar.R;
-import com.example.daftar.model.Customer;
 import com.example.daftar.model.Transaction;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.daftar.ui.CashActivity.EXTRA_CASH;
@@ -34,12 +38,14 @@ public class TransactionActivity extends AppCompatActivity {
 
     public static final int TRANSACTION_TYPE_GIVEN_REQUEST = 2;
     public static final int TRANSACTION_TYPE_TAKEN_REQUEST = 4;
+    private static final int REQUEST_CALL_CODE = 9;
 
     public static final String TRANSACTION_TYPE_GIVEN = "دين";
     public static final String TRANSACTION_TYPE_TAKEN = "أداء";
     private String customerTotalCash;
     private String customerName;
     private String customerPhoneNumber;
+    private ImageView call;
 
     private TransactionViewModel transactionViewModel;
 
@@ -55,6 +61,8 @@ public class TransactionActivity extends AppCompatActivity {
 
         Button givenCashBT = findViewById(R.id.given_cash);
         Button takenCashBT = findViewById(R.id.taken_cash);
+
+        call = findViewById(R.id.call);
 
         Intent intent = getIntent();
         customerName = intent.getStringExtra(EXTRA_CUSTOMER_NAME);
@@ -115,6 +123,25 @@ public class TransactionActivity extends AppCompatActivity {
                 startActivityForResult(i, TRANSACTION_TYPE_TAKEN_REQUEST);
             }
         });
+
+        call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                makePhoneCall();
+            }
+        });
+    }
+
+    public void makePhoneCall() {
+        if (customerPhoneNumber.trim().length() > 0) {
+            if (ContextCompat.checkSelfPermission(TransactionActivity.this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                String dial = "tel:" + customerPhoneNumber;
+                startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+            } else {
+                //show a dialog to the user to ask him for the permission
+                ActivityCompat.requestPermissions(TransactionActivity.this, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL_CODE);
+            }
+        }
     }
 
     @Override
