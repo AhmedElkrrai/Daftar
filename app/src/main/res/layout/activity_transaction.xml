@@ -13,28 +13,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textSize="22sp"
         android:layout_margin="8dp"
-        android:text="Customer Name" />
+        android:text="Customer Name"
+        android:textColor="#1976D2"
+        android:textSize="32sp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp">
+        android:layout_height="wrap_content">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/call"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_margin="24dp"
-            android:src="@drawable/ic_call" />
+            android:background="@drawable/round"
+            android:src="@drawable/ic_call"
+            app:backgroundTint="#E8EAF6" />
 
         <TextView
+            android:paddingRight="8dp"
             android:id="@+id/due_payment_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:text="@string/due_payment" />
+            android:hint="@string/due_payment" />
 
         <TextView
             android:id="@+id/due_payment_cash"
@@ -45,7 +48,9 @@
             android:layout_marginStart="8dp"
             android:paddingEnd="8dp"
             android:text="0"
-            android:textSize="38sp" />
+            android:textColor="#4CAF50"
+            android:textSize="38sp"
+            tools:ignore="RtlSymmetry" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -53,6 +58,7 @@
             android:layout_below="@+id/due_payment_text"
             android:layout_toStartOf="@+id/due_payment_cash"
             android:text="@string/money_unit"
+            android:textColor="#4CAF50"
             android:textSize="38sp" />
 
     </RelativeLayout>
@@ -77,6 +83,7 @@
             android:layout_height="48dp"
             android:layout_margin="8dp"
             android:layout_weight="1"
+            android:backgroundTint="#1976D2"
             android:text="@string/Given" />
 
         <Button
@@ -85,6 +92,7 @@
             android:layout_height="48dp"
             android:layout_margin="8dp"
             android:layout_weight="1"
+            android:backgroundTint="#1976D2"
             android:text="@string/Taken" />
 
     </LinearLayout>

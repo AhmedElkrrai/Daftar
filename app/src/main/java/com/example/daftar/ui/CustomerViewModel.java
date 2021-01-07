@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.daftar.model.Contact;
 import com.example.daftar.model.Customer;
@@ -17,6 +18,8 @@ public class CustomerViewModel extends AndroidViewModel {
 
     private CustomerRepository repository;
     private LiveData<List<Customer>> allCustomers;
+    public MutableLiveData<String> totalPaymentMutableLiveData = new MutableLiveData<>();
+    public MutableLiveData<String> totalDebtMutableLiveData = new MutableLiveData<>();
 
     public CustomerViewModel(@NonNull Application application) {
         super(application);
@@ -34,5 +37,13 @@ public class CustomerViewModel extends AndroidViewModel {
 
     public LiveData<List<Customer>> getAllCustomers() {
         return allCustomers;
+    }
+
+    public void updateTotalPayment(int cash) {
+        totalPaymentMutableLiveData.setValue(cash + " ج.م.");
+    }
+
+    public void updateTotalDebt(int cash) {
+        totalDebtMutableLiveData.setValue(cash + " ج.م.");
     }
 }

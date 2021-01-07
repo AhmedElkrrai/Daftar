@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +46,6 @@ public class TransactionActivity extends AppCompatActivity {
     private String customerTotalCash;
     private String customerName;
     private String customerPhoneNumber;
-    private ImageView call;
 
     private TransactionViewModel transactionViewModel;
 
@@ -62,7 +62,7 @@ public class TransactionActivity extends AppCompatActivity {
         Button givenCashBT = findViewById(R.id.given_cash);
         Button takenCashBT = findViewById(R.id.taken_cash);
 
-        call = findViewById(R.id.call);
+        ImageButton call = (ImageButton) findViewById(R.id.call);
 
         Intent intent = getIntent();
         customerName = intent.getStringExtra(EXTRA_CUSTOMER_NAME);
@@ -132,6 +132,40 @@ public class TransactionActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        LocalDateTime now = LocalDateTime.now();
+        String date = now.toString();
+        date = date.substring(0, 11);
+
+        String cash = null, note = null, customerName = null;
+        if (data != null) {
+            cash = data.getStringExtra(EXTRA_CASH);
+            note = data.getStringExtra(EXTRA_NOTE);
+            customerName = data.getStringExtra(EXTRA_CUSTOMER_NAME);
+        }
+
+        if (requestCode == TRANSACTION_TYPE_GIVEN_REQUEST && resultCode == RESULT_OK) {
+            Transaction transaction = new Transaction(note, date, cash, TRANSACTION_TYPE_GIVEN, customerName);
+
+            int duePayment = Integer.parseInt(customerTotalCash) - Integer.parseInt(cash);
+            customerTotalCash = String.valueOf(duePayment);
+            transactionViewModel.updateDuePaymentMutableLiveData(duePayment);
+
+            transactionViewModel.insert(transaction);
+        } else if (requestCode == TRANSACTION_TYPE_TAKEN_REQUEST && resultCode == RESULT_OK) {
+            Transaction transaction = new Transaction(note, date, cash, TRANSACTION_TYPE_TAKEN, customerName);
+
+            int duePayment = Integer.parseInt(customerTotalCash) + Integer.parseInt(cash);
+            customerTotalCash = String.valueOf(duePayment);
+            transactionViewModel.updateDuePaymentMutableLiveData(duePayment);
+
+            transactionViewModel.insert(transaction);
+        }
+    }
+
     public void makePhoneCall() {
         if (customerPhoneNumber.trim().length() > 0) {
             if (ContextCompat.checkSelfPermission(TransactionActivity.this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
@@ -166,39 +200,5 @@ public class TransactionActivity extends AppCompatActivity {
 
         setResult(RESULT_OK, data);
         super.onBackPressed();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        LocalDateTime now = LocalDateTime.now();
-        String date = now.toString();
-        date = date.substring(0, 11);
-
-        String cash = null, note = null, customerName = null;
-        if (data != null) {
-            cash = data.getStringExtra(EXTRA_CASH);
-            note = data.getStringExtra(EXTRA_NOTE);
-            customerName = data.getStringExtra(EXTRA_CUSTOMER_NAME);
-        }
-
-        if (requestCode == TRANSACTION_TYPE_GIVEN_REQUEST && resultCode == RESULT_OK) {
-            Transaction transaction = new Transaction(note, date, cash, TRANSACTION_TYPE_GIVEN, customerName);
-
-            int duePayment = Integer.parseInt(customerTotalCash) - Integer.parseInt(cash);
-            customerTotalCash = String.valueOf(duePayment);
-            transactionViewModel.updateDuePaymentMutableLiveData(duePayment);
-
-            transactionViewModel.insert(transaction);
-        } else if (requestCode == TRANSACTION_TYPE_TAKEN_REQUEST && resultCode == RESULT_OK) {
-            Transaction transaction = new Transaction(note, date, cash, TRANSACTION_TYPE_TAKEN, customerName);
-
-            int duePayment = Integer.parseInt(customerTotalCash) + Integer.parseInt(cash);
-            customerTotalCash = String.valueOf(duePayment);
-            transactionViewModel.updateDuePaymentMutableLiveData(duePayment);
-
-            transactionViewModel.insert(transaction);
-        }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.daftar.ui;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,10 @@ import com.example.daftar.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.daftar.ui.FragmentDashboard.GREEN;
+import static com.example.daftar.ui.FragmentDashboard.RED;
+import static com.example.daftar.ui.TransactionActivity.TRANSACTION_TYPE_GIVEN;
 
 public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.CustomerHolder> implements Filterable {
     private List<Customer> mCustomersList = new ArrayList<>();
@@ -32,6 +37,13 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         holder.customerName.setText(mCustomersList.get(position).getCustomerName());
         holder.money.setText(mCustomersList.get(position).getTotalCash());
         holder.details.setText(mCustomersList.get(position).getDetails());
+        if (holder.details.getText().toString().equals(TRANSACTION_TYPE_GIVEN)) {
+            holder.money.setTextColor(RED);
+            holder.moneyUnit.setTextColor(RED);
+        } else {
+            holder.money.setTextColor(GREEN);
+            holder.moneyUnit.setTextColor(GREEN);
+        }
     }
 
     @Override
@@ -49,12 +61,14 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         public TextView customerName;
         public TextView money;
         public TextView details;
+        public TextView moneyUnit;
 
         public CustomerHolder(@NonNull View itemView) {
             super(itemView);
             customerName = itemView.findViewById(R.id.customer_name);
             money = itemView.findViewById(R.id.money_amount);
             details = itemView.findViewById(R.id.money_details);
+            moneyUnit = itemView.findViewById(R.id.money_unit2);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

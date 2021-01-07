@@ -14,6 +14,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -32,6 +33,7 @@ import static android.app.Activity.RESULT_OK;
 import static com.example.daftar.ui.ContactsActivity.EXTRA_CUSTOMER_NAME;
 import static com.example.daftar.ui.ContactsActivity.EXTRA_CUSTOMER_NUMBER;
 import static com.example.daftar.ui.TransactionActivity.TRANSACTION_TYPE_GIVEN;
+import static com.example.daftar.ui.TransactionActivity.TRANSACTION_TYPE_TAKEN;
 
 public class FragmentDashboard extends Fragment {
 
@@ -49,6 +51,11 @@ public class FragmentDashboard extends Fragment {
 
     private static final String TAG = "FragmentDashboard";
 
+   @ColorInt
+   public static final int RED = 0xFFF44336;
+    @ColorInt
+    public static final int GREEN = 0xFF4CAF50;
+
     public FragmentDashboard() {
         // Required empty public constructor
     }
@@ -59,6 +66,9 @@ public class FragmentDashboard extends Fragment {
 
         EditText searchView = view.findViewById(R.id.search_bar);
         TextView numberOfCustomersTV = view.findViewById(R.id.num_of_customers);
+
+        TextView totalDeptTV = view.findViewById(R.id.total_debt_TV);
+        TextView totalPayedTV = view.findViewById(R.id.total_payment_TV);
 
         RecyclerView mRecyclerView = view.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
@@ -72,9 +82,31 @@ public class FragmentDashboard extends Fragment {
         customerViewModel.getAllCustomers().observe(getActivity(), new Observer<List<Customer>>() {
             @Override
             public void onChanged(List<Customer> customers) {
+                int totalDebt = 0;
+                int totalPayed = 0;
+                for (Customer customer : customers) {
+                    if (customer.getDetails().equals(TRANSACTION_TYPE_TAKEN))
+                        totalPayed += Integer.parseInt(customer.getTotalCash());
+                    else totalDebt += Integer.parseInt(customer.getTotalCash());
+                }
+                customerViewModel.updateTotalPayment(totalPayed);
+                customerViewModel.updateTotalDebt(totalDebt);
+
                 String numberOfCustomers = "(" + customers.size() + ") ";
                 numberOfCustomersTV.setText(numberOfCustomers);
                 mAdapter.setList(customers);
+            }
+        });
+        customerViewModel.totalDebtMutableLiveData.observe(getActivity(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                totalDeptTV.setText(s);
+            }
+        });
+        customerViewModel.totalPaymentMutableLiveData.observe(getActivity(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                totalPayedTV.setText(s);
             }
         });
 
