@@ -62,7 +62,6 @@ public class ContactsActivity extends AppCompatActivity {
             @Override
             public void onItemClicked(Contact contact) {
                 String customerName = contact.getContactName();
-                Toast.makeText(ContactsActivity.this, "Customer selected", Toast.LENGTH_SHORT).show();
                 Intent data = new Intent();
                 data.putExtra(EXTRA_CUSTOMER_NAME, customerName);
                 data.putExtra(EXTRA_CUSTOMER_NUMBER, contact.getPhoneNumber());

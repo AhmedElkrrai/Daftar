@@ -1,21 +1,17 @@
 package com.example.daftar.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -27,6 +23,7 @@ import com.example.daftar.R;
 import com.example.daftar.model.Customer;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.HashSet;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -51,10 +48,12 @@ public class FragmentDashboard extends Fragment {
 
     private static final String TAG = "FragmentDashboard";
 
-   @ColorInt
-   public static final int RED = 0xFFF44336;
+    @ColorInt
+    public static final int RED = 0xFFF44336;
     @ColorInt
     public static final int GREEN = 0xFF4CAF50;
+
+    HashSet<String> set;
 
     public FragmentDashboard() {
         // Required empty public constructor
@@ -79,12 +78,14 @@ public class FragmentDashboard extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
 
         customerViewModel = ViewModelProviders.of(this).get(CustomerViewModel.class);
+        set = customerViewModel.customerNames.getValue();
         customerViewModel.getAllCustomers().observe(getActivity(), new Observer<List<Customer>>() {
             @Override
             public void onChanged(List<Customer> customers) {
                 int totalDebt = 0;
                 int totalPayed = 0;
                 for (Customer customer : customers) {
+                    customerViewModel.updateCustomerNames(customer.getCustomerName());
                     if (customer.getDetails().equals(TRANSACTION_TYPE_TAKEN))
                         totalPayed += Integer.parseInt(customer.getTotalCash());
                     else totalDebt += Integer.parseInt(customer.getTotalCash());
@@ -153,8 +154,12 @@ public class FragmentDashboard extends Fragment {
         if (requestCode == ADD_CUSTOMER_REQUEST && resultCode == RESULT_OK) {
             String customerName = data.getStringExtra(EXTRA_CUSTOMER_NAME);
             String customerNumber = data.getStringExtra(EXTRA_CUSTOMER_NUMBER);
-            Customer customer = new Customer(customerName, "0", TRANSACTION_TYPE_GIVEN, customerNumber);
-            customerViewModel.insert(customer);
+
+            if (set.size() == 0 || !(set.contains(customerName))) {
+                customerViewModel.updateCustomerNames(customerName);
+                Customer customer = new Customer(customerName, "0", TRANSACTION_TYPE_GIVEN, customerNumber);
+                customerViewModel.insert(customer);
+            } else Toast.makeText(getActivity(), "Customer Existed", Toast.LENGTH_SHORT).show();
         } else if (requestCode == UPDATE_CUSTOMER_REQUEST && resultCode == RESULT_OK) {
 
             int id = data.getIntExtra(EXTRA_ID, -1);
@@ -171,10 +176,5 @@ public class FragmentDashboard extends Fragment {
             customer.setId(id);
             customerViewModel.update(customer);
         }
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
     }
 }

@@ -34,6 +34,8 @@ import static com.example.daftar.ui.ContactsActivity.EXTRA_CUSTOMER_NUMBER;
 import static com.example.daftar.ui.FragmentDashboard.EXTRA_CUSTOMER_TOTAL_CASH;
 import static com.example.daftar.ui.FragmentDashboard.EXTRA_ID;
 import static com.example.daftar.ui.FragmentDashboard.EXTRA_TRANSACTION_TYPE;
+import static com.example.daftar.ui.FragmentDashboard.GREEN;
+import static com.example.daftar.ui.FragmentDashboard.RED;
 
 public class TransactionActivity extends AppCompatActivity {
 
@@ -58,11 +60,12 @@ public class TransactionActivity extends AppCompatActivity {
 
         TextView transactionCustomerNameTV = findViewById(R.id.transaction_customer_name);
         TextView duePaymentTV = findViewById(R.id.due_payment_cash);
+        TextView moneyUnitTV = findViewById(R.id.money_unit_3);
 
         Button givenCashBT = findViewById(R.id.given_cash);
         Button takenCashBT = findViewById(R.id.taken_cash);
 
-        ImageButton call = (ImageButton) findViewById(R.id.call);
+        ImageButton call = findViewById(R.id.call);
 
         Intent intent = getIntent();
         customerName = intent.getStringExtra(EXTRA_CUSTOMER_NAME);
@@ -77,6 +80,8 @@ public class TransactionActivity extends AppCompatActivity {
             int totalCash = Integer.parseInt(customerTotalCash);
             totalCash *= -1;
             customerTotalCash = String.valueOf(totalCash);
+            duePaymentTV.setTextColor(RED);
+            moneyUnitTV.setTextColor(RED);
         }
 
         RecyclerView mRecyclerView = findViewById(R.id.transaction_recycler_view);
@@ -99,7 +104,16 @@ public class TransactionActivity extends AppCompatActivity {
         transactionViewModel.duePaymentMutableLiveData.observe(TransactionActivity.this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                duePaymentTV.setText(s);
+                int totalCash = Integer.parseInt(s);
+                if (totalCash < 0) {
+                    duePaymentTV.setTextColor(RED);
+                    moneyUnitTV.setTextColor(RED);
+                    duePaymentTV.setText(String.valueOf(totalCash * -1));
+                } else {
+                    duePaymentTV.setTextColor(GREEN);
+                    moneyUnitTV.setTextColor(GREEN);
+                    duePaymentTV.setText(s);
+                }
             }
         });
 

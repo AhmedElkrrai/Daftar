@@ -53,6 +53,7 @@
             tools:ignore="RtlSymmetry" />
 
         <TextView
+            android:id="@+id/money_unit_3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/due_payment_text"
