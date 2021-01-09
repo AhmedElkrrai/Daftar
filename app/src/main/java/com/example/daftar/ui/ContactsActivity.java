@@ -4,6 +4,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,14 +16,11 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.daftar.R;
 import com.example.daftar.model.Contact;
-import com.example.daftar.model.Customer;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,8 +28,8 @@ import java.util.Set;
 public class ContactsActivity extends AppCompatActivity {
 
     private final int READ_CONTACTS_CODE = 12;
-    private List<Contact> mContactsList;
     private ContactAdapter mAdapter;
+    private ContactViewModel viewModel;
 
     public static final String EXTRA_CUSTOMER_NAME =
             "package com.example.room.EXTRA_CUSTOMER_NAME";
@@ -50,10 +49,9 @@ public class ContactsActivity extends AppCompatActivity {
         RecyclerView mRecyclerView = findViewById(R.id.contacts_recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
 
-        mContactsList = new ArrayList<>();
-
         mAdapter = new ContactAdapter();
-        mAdapter.setList(mContactsList);
+        viewModel = ViewModelProviders.of(ContactsActivity.this).get(ContactViewModel.class);
+
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -75,9 +73,18 @@ public class ContactsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (ContextCompat.checkSelfPermission(ContactsActivity.this, Manifest.permission.READ_CONTACTS)
-                == PackageManager.PERMISSION_GRANTED)
-            loadContacts();
+        viewModel.getAllContacts().observe(ContactsActivity.this, new Observer<List<Contact>>() {
+            @Override
+            public void onChanged(List<Contact> contacts) {
+                if (contacts.size() == 0) {
+                    if (ContextCompat.checkSelfPermission(ContactsActivity.this, Manifest.permission.READ_CONTACTS)
+                            == PackageManager.PERMISSION_GRANTED) {
+                        loadContacts();
+                    }
+                }
+                mAdapter.setList(contacts);
+            }
+        });
     }
 
     private void loadContacts() {
@@ -105,8 +112,7 @@ public class ContactsActivity extends AppCompatActivity {
                         phoneNumber = phoneNumber.replace(" ", "");
                         if (!hashSet.contains(phoneNumber)) {
                             contact = new Contact(name, phoneNumber);
-                            mContactsList.add(contact);
-                            mAdapter.notifyDataSetChanged();
+                            viewModel.insert(contact);
                             hashSet.add(phoneNumber);
                         }
                     }
